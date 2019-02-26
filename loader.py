@@ -8,8 +8,8 @@ class MultiBrain:
     T_DIM = 212
     FILE_EXTENSION = 'mat'
     def __init__(self, **kargs):
-        for k,v in kargs:
-            self.set_attribute(k, v)
+        for k,v in kargs.items():
+            setattr(self, k, v)
         self.file_list = []
         for item in os.listdir(self.DIR_ROOT):
             first_structure = os.path.join(self.DIR_ROOT, item)
