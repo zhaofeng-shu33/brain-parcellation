@@ -15,12 +15,15 @@ class MultiBrain:
     MASK_FILE_NAME = 'MNI_T1_3mm_gmask.hdr'
     MASK_FILE_DIR = 'mask'
     GRID_SIZE = 10
+    DIR_EXCLUDE_PATTERN = 'tb'
     def __init__(self, **kargs):
         for k,v in kargs.items():
             setattr(self, k, v)
         self.file_list = []
         self.current_mat_index = -1
         for item in os.listdir(self.DIR_ROOT):
+            if(item.find(self.DIR_EXCLUDE_PATTERN)>=0):
+                continue
             first_structure = os.path.join(self.DIR_ROOT, item)
             if not(os.path.isdir(first_structure)):
                 continue
