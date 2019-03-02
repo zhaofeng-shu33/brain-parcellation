@@ -4,10 +4,16 @@ import reducer
 import numpy as np
 import os
 import time
+import threading
 class Builder:
     NUM_NODES = 141
     CACHE_DIR = 'F:/cache/'
     ENABLE_CACHE = True
+    def worker(self, i, j):
+        start_time = time.time()
+        self.weight_matrix[i, j] = ace_nn(self.data[:,:,i], self.data[:,:,j], return_hscore=True)
+        current_time_used = '%.2f'%(time.time() - start_time)
+        print('{0}/{1}, time used: {2}s'.format(self.cnt, self.total_computation_time, current_time_used))      
     def __init__(self):
         # get the size (num_of_features, num_of_instances)
         data_0 = self.get_data(0)
@@ -20,17 +26,16 @@ class Builder:
         # use a numpy array to store the weight
         print('loading data finished')
         self.weight_matrix = np.zeros(shape=(self.NUM_NODES, self.NUM_NODES))
-        total_computation_time = (self.NUM_NODES * (self.NUM_NODES - 1))/2
-        cnt = 1
+        self.total_computation_time = (self.NUM_NODES * (self.NUM_NODES - 1))/2
+        self.cnt = 1
         for i in range(self.NUM_NODES):
             for j in range(i+1, self.NUM_NODES):
-                start_time = time.time()
-                self.weight_matrix[i, j] = ace_nn(self.data[:,:,i], self.data[:,:,j], return_hscore = True)
-                current_time_used = int(time.time() - start_time)
-                print('{0}/{1}, time used: {2}s'.format(cnt, total_computation_time, current_time_used)) 
-                cnt += 1
-        if(ENABLE_CACHE):
-            weight_file = os.path.join(CACHE_DIR, 'weight_matrix.npy')
+                t = threading.Thread(target=self.worker,args=(i, j))
+                t.start()
+                t.join() 
+                self.cnt += 1
+        if(self.ENABLE_CACHE):
+            weight_file = os.path.join(self.CACHE_DIR, 'weight_matrix.npy')
             np.save(weight_file, self.weight_matrix)
     def get_data(self, index):
         data_file = os.path.join(self.CACHE_DIR, 'feature-node-reduce-{0}.npy'.format(index))
