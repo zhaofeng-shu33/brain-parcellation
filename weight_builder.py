@@ -17,6 +17,10 @@ class Builder:
         print('{0}/{1}, time used: {2}s'.format(self.cnt, self.total_computation_time, current_time_used))      
     def __init__(self):
         # get the size (num_of_features, num_of_instances)
+        weight_file = os.path.join(self.CACHE_DIR, 'weight_matrix.npy')
+        if(os.path.exists(weight_file)):
+            self.weight_matrix = np.load(weight_file)
+            return
         data_0 = self.get_data(0)
         nof, noi = data_0.shape
         self.data = np.zeros(shape=(nof,noi,self.NUM_NODES))
@@ -38,7 +42,6 @@ class Builder:
                 print('rss: %d' % proc.memory_info().rss)
                 self.cnt += 1
         if(self.ENABLE_CACHE):
-            weight_file = os.path.join(self.CACHE_DIR, 'weight_matrix.npy')
             np.save(weight_file, self.weight_matrix)
     def get_data(self, index):
         data_file = os.path.join(self.CACHE_DIR, 'feature-node-reduce-{0}.npy'.format(index))
