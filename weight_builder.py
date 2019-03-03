@@ -5,6 +5,7 @@ import numpy as np
 import os
 import time
 import threading
+import psutil
 class Builder:
     NUM_NODES = 141
     CACHE_DIR = 'F:/cache/'
@@ -28,11 +29,13 @@ class Builder:
         self.weight_matrix = np.zeros(shape=(self.NUM_NODES, self.NUM_NODES))
         self.total_computation_time = (self.NUM_NODES * (self.NUM_NODES - 1))/2
         self.cnt = 1
+        proc=psutil.Process(os.getpid())
         for i in range(self.NUM_NODES):
             for j in range(i+1, self.NUM_NODES):
                 t = threading.Thread(target=self.worker,args=(i, j))
                 t.start()
                 t.join() 
+                print('rss: %d' % proc.memory_info().rss)
                 self.cnt += 1
         if(self.ENABLE_CACHE):
             weight_file = os.path.join(self.CACHE_DIR, 'weight_matrix.npy')
