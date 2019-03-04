@@ -32,8 +32,8 @@ class MultiBrain:
                     self.file_list.append(os.path.join(first_structure, mat_file))
         self.num_instances = len(self.file_list)
         # load mask file
-        img = nib.load(os.path.join(self.DIR_ROOT, self.MASK_FILE_DIR, self.MASK_FILE_NAME))
-        self.mask = img.get_fdata().astype(np.bool)
+        self.img = nib.load(os.path.join(self.DIR_ROOT, self.MASK_FILE_DIR, self.MASK_FILE_NAME))
+        self.mask = self.img.get_fdata().astype(np.bool)
     def get_time_series(self, i, x, y, z):
         '''
             (x, y, z) is left corner

@@ -26,5 +26,6 @@ class BrainCluster(InfoCluster):
             x,y,z = self.multi_brain.nodes[i]
             self.vis_array[x:x+size,y:y+size,z:z+size] = self.multi_brain.mask[x:x+size,y:y+size,z:z+size] *(cat[i]+1)
         self.img = nib.Nifti1Image(self.vis_array, np.eye(4))
-        plotting.plot_roi(self.img)
+        bg_img = nib.Nifti1Image(np.array(self.multi_brain.mask,dtype='int'), np.eye(4))
+        plotting.plot_roi(self.img, bg_img)
         plotting.show()
