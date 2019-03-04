@@ -1,0 +1,40 @@
+\documentclass{article}
+\def\code#1{\texttt{#1}}
+\usepackage{hyperref}
+\title{brain parcellation with clustering method}
+\begin{document}
+\maketitle
+
+\section{Data description}
+This is a description summary of fMRI data, provided by \textit{Yale 
+Magnetic Resonance Research Center}.
+
+There are 423 \code{tr} data samples, 202 \code{tb} data samples.
+
+For each data sample, it can be treated as a 4d array,
+there is
+$(x, y, z, t)$, where $x = 61, y= 73, z = 61$, and  $t= 212$ ( for
+ file starts with \texttt{tr}) or $217$ ( for file starts with \texttt{tb}
+)
+However, not every voxel is within the brain region. we use another \code{mask} array to indicate the
+voxel within the valid region. The total number of valid voxel is 47763.
+All the 3d images share the same mask.
+
+After compression, each data sample uses about \code{44.8MB} storage.
+
+In each matlab data files, there are four parameters : \code{img, simg, mask ,pos}.
+\section{Method}
+If only image data of only one subject is given, first convert the 4d array data to \code{(n\_samples, n\_features)}
+with the image mask. And then we can apply standard clustering algorithm.
+\section{Tools}
+\begin{itemize}
+\item \texttt{Python: nilearn}
+\item \texttt{Python: nilabel}
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{nilearnClusteringExample} \href{https://nilearn.github.io/connectivity/parcellating.html}{nilearn parcellation example}
+\bibitem{groupwise} Groupwise whole-brain parcellation from resting-state fMRI
+data for network node identification
+\end{thebibliography}
+\end{document}

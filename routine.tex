@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+\title{How to apply info-clustering algorithm on the brain parcellation problem}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+\item data loader, we don't differentiate whether the brain fMRI is from the same person.
+
+In this step, we divide the brain cube into different blocks. For each block, we apply the reshape operation (from 4-d array to 1-d array). Then collecting different instances of 1-d array, we apply \textbf{pca} dimension reduction to reduce the dimension of features.
+
+\item connectivity matrix computation(neural network)
+
+For every two distinct nodes, run the \texttt{ace\_nn } routine to compute the approximation of $
+\frac{1}{2}\norm{B}_F^2$
+
+\item apply info-clustering algorithm to find suitable partition result.
+
+For given threshold clustering number, we can find the corresponding paritition.
+
+\item result visualization
+
+use three-view drawing to visualize the 3D structure of human brain and  use different colors to represent different cluster.
+
+\end{enumerate}
+\end{document}
